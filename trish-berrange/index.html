@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<!--
+  IMAGE SLOTS
+  ──────────────────────────────────────────
+  1. hero-trish.jpg      — 560×600   Hero section right column. Warm, friendly photo of Trish smiling.
+  2. about-trish.jpg     — 360×440   About section left column. Relaxed seated/lifestyle photo of Trish.
+  3. testimonial-amanda.jpg — 64×64  Round profile photo. Amanda K.
+  4. testimonial-jade.jpg   — 64×64  Round profile photo. Jade M.
+  5. testimonial-sarah.jpg  — 64×64  Round profile photo. Sarah T.
+  ──────────────────────────────────────────
+  FORMSPREE: Replace xTRISHFRM with Trish's actual Formspree form ID.
+  Create at formspree.io — use Trish's email address as the notification address.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>What's Your Hidden Digital Product? — TrishB Digital</title>
+  <meta name="description" content="Answer 5 quick questions and discover exactly what digital product you should be creating — based on the skills and experience you already have."/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --green:       #1E5147;
+      --green-dark:  #163d36;
+      --green-light: #e4f2ee;
+      --amber:       #E8A030;
+      --amber-light: #fdf3e0;
+      --bg:          #FDFAF5;
+      --bg-alt:      #F4EFE5;
+      --text:        #1C2B2A;
+      --muted:       #4A6560;
+      --border:      #d5e5e0;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; line-height: 1.2; }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--green);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .2s;
+    }
+    .btn-primary:hover { background: var(--green-dark); }
+
+    .btn-amber {
+      display: inline-block;
+      background: var(--amber);
+      color: #1C2B2A;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 16px 36px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all .2s;
+      box-shadow: 0 4px 20px rgba(232,160,48,.3);
+    }
+    .btn-amber:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(232,160,48,.45); }
+
+    /* Quiz */
+    .quiz-progress-bar { height: 6px; background: var(--green-light); border-radius: 99px; overflow: hidden; }
+    .quiz-progress-fill { height: 100%; background: var(--green); border-radius: 99px; transition: width .4s ease; }
+
+    .answer-card {
+      display: block;
+      width: 100%;
+      text-align: left;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 22px;
+      margin-bottom: 12px;
+      background: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--text);
+      cursor: pointer;
+      transition: all .18s;
+    }
+    .answer-card:hover {
+      border-color: var(--green);
+      background: var(--green-light);
+      transform: translateX(5px);
+    }
+
+    .result-wrap {
+      background: linear-gradient(135deg, var(--green) 0%, #2b7a6a 100%);
+      border-radius: 20px;
+      padding: 40px 36px;
+      color: #fff;
+      text-align: center;
+    }
+    .result-badge {
+      display: inline-block;
+      background: var(--amber);
+      color: #1C2B2A;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 99px;
+      margin-bottom: 20px;
+    }
+
+    .testimonial-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+    }
+
+    .fade-in { animation: fadeIn .4s ease forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Two-col layout helpers */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .pain-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+    @media (max-width: 768px) {
+      .two-col { grid-template-columns: 1fr; gap: 36px; }
+      .two-col .img-col { order: -1; }
+      .two-col .img-col img { max-width: 280px; margin: 0 auto; display: block; }
+      .three-col { grid-template-columns: 1fr; }
+      .pain-col { grid-template-columns: 1fr; }
+      .about-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+    }
+
+    .section-inner { max-width: 1080px; margin: 0 auto; padding: 80px 24px; }
+    @media (max-width: 640px) { .section-inner { padding: 60px 20px; } }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav style="position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;justify-content:space-between;align-items:center;">
+  <a href="#" style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:17px;color:var(--green);text-decoration:none;">TrishB Digital</a>
+  <a href="#quiz" class="btn-primary">Take the Quiz →</a>
+</nav>
+
+<!-- HERO -->
+<section style="background:var(--bg);padding:80px 24px 60px;">
+  <div style="max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;">
+    <div>
+      <p style="font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:16px;">Free 2-Minute Quiz</p>
+      <h1 style="font-size:clamp(2rem,4vw,3.1rem);font-weight:800;color:var(--text);margin-bottom:20px;">You Already Have a Digital Product —<br><span style="color:var(--green);">You Just Don't Know It Yet.</span></h1>
+      <p style="font-size:17px;color:var(--muted);line-height:1.8;margin-bottom:32px;">Answer 5 quick questions and find out exactly what you should be creating and selling — based on the experience and knowledge you already have right now.</p>
+      <a href="#quiz" class="btn-amber" style="font-size:16px;padding:18px 40px;">Find My Digital Product →</a>
+      <p style="font-size:13px;color:var(--muted);margin-top:16px;">✓ Takes 2 minutes &nbsp;·&nbsp; ✓ Free personalised result &nbsp;·&nbsp; ✓ No sign-up to start</p>
+    </div>
+    <div>
+      <img src="Trish1.jpg" alt="Trish Berrange" style="border-radius:20px;width:100%;display:block;box-shadow:0 20px 60px rgba(30,81,71,.18);object-fit:cover;"/>
+    </div>
+  </div>
+</section>
+
+<!-- PAIN POINTS -->
+<section style="background:var(--bg-alt);">
+  <div class="section-inner">
+    <p style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--green);text-align:center;margin-bottom:12px;">Sound Familiar?</p>
+    <h2 style="font-family:'Montserrat',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:700;text-align:center;color:var(--text);margin-bottom:40px;">You know you have something to offer.<br>You just can't figure out what to package.</h2>
+    <div class="pain-col">
+      <div style="background:#fff;border-radius:14px;padding:28px;border-left:4px solid var(--green);">
+        <p style="font-size:26px;margin-bottom:12px;">🤔</p>
+        <p style="font-family:'Montserrat',sans-serif;font-weight:600;font-size:15px;color:var(--text);line-height:1.5;">"I have years of experience but can't figure out what people would actually pay for."</p>
+      </div>
+      <div style="background:#fff;border-radius:14px;padding:28px;border-left:4px solid var(--amber);">
+        <p style="font-size:26px;margin-bottom:12px;">😔</p>
+        <p style="font-family:'Montserrat',sans-serif;font-weight:600;font-size:15px;color:var(--text);line-height:1.5;">"I see other moms building online businesses and wonder what I'm missing."</p>
+      </div>
+      <div style="background:#fff;border-radius:14px;padding:28px;border-left:4px solid var(--green);">
+        <p style="font-size:26px;margin-bottom:12px;">😤</p>
+        <p style="font-family:'Montserrat',sans-serif;font-weight:600;font-size:15px;color:var(--text);line-height:1.5;">"I'm tired of trading time for money but I don't know where to begin."</p>
+      </div>
+    </div>
+    <p style="text-align:center;margin-top:36px;font-size:17px;color:var(--green);font-family:'Montserrat',sans-serif;font-weight:600;">This quiz changes that. In 2 minutes, you'll know exactly where to start.</p>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz" style="background:var(--bg);">
+  <div class="section-inner" style="max-width:700px;">
+
+    <!-- Intro -->
+    <div id="quiz-intro" style="text-align:center;">
+      <p style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:12px;">The Digital Product Quiz</p>
+      <h2 style="font-family:'Montserrat',sans-serif;font-size:clamp(1.8rem,3vw,2.4rem);font-weight:800;color:var(--text);margin-bottom:16px;">What's Your Hidden Digital Product?</h2>
+      <p style="font-size:16px;color:var(--muted);line-height:1.8;margin-bottom:36px;max-width:500px;margin-left:auto;margin-right:auto;">5 questions. 2 minutes. A personalised result that shows you exactly what kind of digital product to create — and how to get started.</p>
+      <button onclick="startQuiz()" class="btn-amber" style="font-size:16px;padding:18px 44px;">Start the Quiz →</button>
+    </div>
+
+    <!-- Questions -->
+    <div id="quiz-questions" style="display:none;">
+      <div style="margin-bottom:28px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <p id="q-counter" style="font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);">Question 1 of 5</p>
+          <p id="q-pct" style="font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;color:var(--green);">0% complete</p>
+        </div>
+        <div class="quiz-progress-bar">
+          <div class="quiz-progress-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+      <div id="question-content"></div>
+    </div>
+
+    <!-- Email capture -->
+    <div id="quiz-email" style="display:none;">
+      <div style="background:#fff;border-radius:20px;border:2px solid var(--border);padding:44px 40px;text-align:center;box-shadow:0 8px 40px rgba(30,81,71,.07);">
+        <p style="font-size:36px;margin-bottom:16px;">🎉</p>
+        <h3 style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.7rem;color:var(--text);margin-bottom:12px;">Your result is ready!</h3>
+        <p style="color:var(--muted);font-size:15px;line-height:1.8;margin-bottom:28px;">Pop in your email and I'll reveal your digital product type — plus send you a personalised roadmap to get started.</p>
+        <form id="email-form" onsubmit="submitEmail(event)">
+          <input type="email" id="email-input" placeholder="your@email.com" required
+            style="width:100%;padding:16px 18px;border:2px solid var(--border);border-radius:10px;font-size:15px;font-family:'DM Sans',sans-serif;margin-bottom:14px;outline:none;transition:border .2s;color:var(--text);background:#fafaf7;"
+            onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border)'"/>
+          <button type="submit" class="btn-amber" style="width:100%;font-size:15px;padding:16px;">Show Me My Result →</button>
+          <p style="font-size:12px;color:var(--muted);margin-top:12px;">No spam. Just your result + a helpful next step.</p>
+        </form>
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div id="quiz-result" style="display:none;"></div>
+
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section style="background:var(--bg-alt);">
+  <div class="section-inner">
+    <p style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--green);text-align:center;margin-bottom:12px;">Real Results</p>
+    <h2 style="font-family:'Montserrat',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:700;text-align:center;color:var(--text);margin-bottom:40px;">Moms who found their product and ran with it</h2>
+    <div class="three-col">
+      <div class="testimonial-card">
+        <p style="font-size:20px;color:var(--amber);margin-bottom:12px;">★★★★★</p>
+        <!-- Replace with Trish's actual testimonial -->
+        <p style="font-size:15px;line-height:1.8;color:var(--muted);margin-bottom:20px;font-style:italic;">"I had no idea my daily planning system could be a product. Now I sell it as a template bundle and make money while the kids are at school."</p>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <!-- Replace src with testimonial-amanda.jpg -->
+          <img src="https://placehold.co/52x52/E8A030/ffffff?text=A" style="border-radius:50%;width:52px;height:52px;flex-shrink:0;" alt=""/>
+          <div>
+            <p style="font-family:'Montserrat',sans-serif;font-weight:600;font-size:14px;color:var(--text);">Amanda K.</p>
+            <p style="font-size:13px;color:var(--muted);">Template Queen → $800/mo in 90 days</p>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <p style="font-size:20px;color:var(--amber);margin-bottom:12px;">★★★★★</p>
+        <p style="font-size:15px;line-height:1.8;color:var(--muted);margin-bottom:20px;font-style:italic;">"Trish helped me realise my 10 years of experience was worth packaging. My first mini course sold out in a week."</p>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <img src="https://placehold.co/52x52/1E5147/ffffff?text=J" style="border-radius:50%;width:52px;height:52px;flex-shrink:0;" alt=""/>
+          <div>
+            <p style="font-family:'Montserrat',sans-serif;font-weight:600;font-size:14px;color:var(--text);">Jade M.</p>
+            <p style="font-size:13px;color:var(--muted);">Digital Teacher → First course launched</p>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <p style="font-size:20px;color:var(--amber);margin-bottom:12px;">★★★★★</p>
+        <p style="font-size:15px;line-height:1.8;color:var(--muted);margin-bottom:20px;font-style:italic;">"I was so close to giving up. This process showed me exactly where to start. I now have 6 paying clients a month."</p>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <img src="https://placehold.co/52x52/E8A030/ffffff?text=S" style="border-radius:50%;width:52px;height:52px;flex-shrink:0;" alt=""/>
+          <div>
+            <p style="font-family:'Montserrat',sans-serif;font-weight:600;font-size:14px;color:var(--text);">Sarah T.</p>
+            <p style="font-size:13px;color:var(--muted);">Digital Coach → 6 paying clients</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT TRISH -->
+<section style="background:var(--bg);">
+  <div class="section-inner">
+    <div class="about-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;">
+      <div>
+        <img src="about-trish.jpg" alt="Trish Berrange" style="border-radius:16px;width:100%;display:block;box-shadow:0 12px 40px rgba(30,81,71,.15);object-fit:cover;"/>
+      </div>
+      <div style="padding-top:8px;">
+        <p style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:14px;">About Trish</p>
+        <h2 style="font-family:'Montserrat',sans-serif;font-size:clamp(1.8rem,3vw,2.6rem);font-weight:800;color:var(--text);margin-bottom:20px;line-height:1.25;">I was a busy mom who almost missed her own goldmine.</h2>
+        <!-- Update this copy with Trish's actual story -->
+        <p style="color:var(--muted);font-size:16px;line-height:1.9;margin-bottom:16px;">Like you, I had years of experience, skills, and knowledge — but I couldn't see how to turn it into income. I figured it out, and now I help other moms do the same.</p>
+        <p style="color:var(--muted);font-size:16px;line-height:1.9;margin-bottom:32px;">You don't need a big audience, a tech degree, or hours of spare time. You need a clear starting point — and that's exactly what this quiz gives you.</p>
+        <a href="#quiz" class="btn-primary" style="font-size:15px;padding:14px 28px;">Take the Free Quiz →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer style="background:var(--green);color:rgba(255,255,255,.75);padding:44px 24px;text-align:center;">
+  <p style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:17px;color:#fff;margin-bottom:8px;">TrishB Digital</p>
+  <p style="font-size:14px;margin-bottom:16px;">Helping busy moms turn their experience into income.</p>
+  <a href="https://www.digitaldmsmom.com" target="_blank" style="font-size:13px;color:rgba(255,255,255,.6);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.25);">digitaldmsmom.com</a>
+  <p style="font-size:12px;margin-top:20px;opacity:.5;">© 2026 TrishB Digital. All rights reserved.</p>
+</footer>
+
+<script>
+var QUESTIONS = [
+  {
+    q: "What do people in your life most often come to you for?",
+    a: [
+      { text: "Advice and step-by-step guidance on how to do something",    type: "T" },
+      { text: "Shortcuts, templates, or ready-made resources",              type: "P" },
+      { text: "Support, a listening ear, or accountability",                type: "C" },
+      { text: "Fresh ideas or a new perspective on something",              type: "R" }
+    ]
+  },
+  {
+    q: "Which of these sounds like your perfect work session?",
+    a: [
+      { text: "Recording a lesson or writing a clear step-by-step guide",     type: "T" },
+      { text: "Building a spreadsheet, planner, or beautifully designed doc", type: "P" },
+      { text: "A conversation that helps someone shift how they see things",   type: "C" },
+      { text: "Writing content, filming, or creating something from scratch",  type: "R" }
+    ]
+  },
+  {
+    q: "When you look back at your experience, what feels most valuable?",
+    a: [
+      { text: "A system or process I've figured out that others still struggle with", type: "T" },
+      { text: "Tools and shortcuts I created that save me loads of time",            type: "P" },
+      { text: "My ability to help people see their situation from a new angle",      type: "C" },
+      { text: "My unique perspective and the way I communicate ideas",               type: "R" }
+    ]
+  },
+  {
+    q: "What would 'passive income' look like for you?",
+    a: [
+      { text: "A course or workshop people buy and work through on their own",  type: "T" },
+      { text: "A digital download someone buys without me needing to show up",  type: "P" },
+      { text: "Recurring clients in a group programme or on a retainer",        type: "C" },
+      { text: "A paid newsletter or membership people subscribe to",            type: "R" }
+    ]
+  },
+  {
+    q: "In 6 months, what would feel like a real win?",
+    a: [
+      { text: "100 people have learned a skill I already know inside out",          type: "T" },
+      { text: "A digital shop with products being bought while I sleep",            type: "P" },
+      { text: "A roster of clients I genuinely love supporting every single week",  type: "C" },
+      { text: "A growing audience who can't wait for my next piece of content",     type: "R" }
+    ]
+  }
+];
+
+var RESULTS = {
+  T: {
+    emoji: "🎓",
+    title: "The Digital Teacher",
+    tagline: "Your experience is a curriculum waiting to happen.",
+    desc: "You have a gift for breaking things down and making the complex feel simple. People come to you because you explain things in a way that actually sticks — and that's exactly what the digital world needs more of. Your knowledge isn't just valuable, it's teachable.",
+    product: "Your first product: A 3-part mini course or step-by-step guide built around something you already know inside out.",
+    next: "Trish will send you a personalised roadmap for packaging your knowledge into your first digital course — no big audience or tech experience needed."
+  },
+  P: {
+    emoji: "👑",
+    title: "The Template Queen",
+    tagline: "Your systems and shortcuts are worth more than you think.",
+    desc: "You're the person who has a process for everything — and your ability to organise, systemise, and simplify things is exactly what busy people will pay for. Your knowledge is already packaged. You just haven't put a price tag on it yet.",
+    product: "Your first product: A digital template bundle, planner, or resource pack that saves your ideal client hours of effort.",
+    next: "Trish will send you a personalised roadmap for building and listing your first digital product — on Etsy, Gumroad, or your own site."
+  },
+  C: {
+    emoji: "💛",
+    title: "The Digital Coach",
+    tagline: "Transforming people through conversation is your superpower.",
+    desc: "You come alive when someone has a breakthrough — and you naturally create those moments. Your presence, your questions, and the way you help people see themselves clearly? That's genuinely valuable, and people will pay for access to it.",
+    product: "Your first product: A 4-week group coaching programme or 1:1 offer built around your signature transformation.",
+    next: "Trish will send you a personalised roadmap for signing your first paying coaching clients — without a big platform or following."
+  },
+  R: {
+    emoji: "✨",
+    title: "The Content Creator",
+    tagline: "Your ideas and voice are your most valuable product.",
+    desc: "You generate ideas others can't quite see yet, and you communicate in a way that makes people feel understood. Your perspective is genuinely unique — and in the right format, people will subscribe, follow, and pay for it.",
+    product: "Your first product: A paid newsletter, content membership, or curated resource library your audience will love.",
+    next: "Trish will send you a personalised roadmap for monetising your content and building a paying audience from scratch."
+  }
+};
+
+var answers = [];
+var currentQ = 0;
+
+function startQuiz() {
+  document.getElementById('quiz-intro').style.display = 'none';
+  var qSection = document.getElementById('quiz-questions');
+  qSection.style.display = 'block';
+  qSection.classList.add('fade-in');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  var q = QUESTIONS[currentQ];
+  var pct = Math.round((currentQ / QUESTIONS.length) * 100);
+  document.getElementById('q-counter').textContent = 'Question ' + (currentQ + 1) + ' of ' + QUESTIONS.length;
+  document.getElementById('q-pct').textContent = pct + '% complete';
+  document.getElementById('progress-fill').style.width = pct + '%';
+
+  var html = '<div class="fade-in"><h3 style="font-family:\'Montserrat\',sans-serif;font-weight:700;font-size:clamp(1.15rem,2.5vw,1.45rem);color:var(--text);margin-bottom:24px;line-height:1.4;">' + q.q + '</h3>';
+  q.a.forEach(function(opt, i) {
+    html += '<button class="answer-card" onclick="selectAnswer(\'' + opt.type + '\')">';
+    html += '<span style="color:var(--green);font-weight:700;font-family:\'Montserrat\',sans-serif;margin-right:10px;">' + String.fromCharCode(65 + i) + '.</span>';
+    html += opt.text + '</button>';
+  });
+  html += '</div>';
+  document.getElementById('question-content').innerHTML = html;
+}
+
+function selectAnswer(type) {
+  answers.push(type);
+  currentQ++;
+
+  if (currentQ < QUESTIONS.length) {
+    document.getElementById('progress-fill').style.width = Math.round((currentQ / QUESTIONS.length) * 100) + '%';
+    renderQuestion();
+  } else {
+    document.getElementById('progress-fill').style.width = '100%';
+    document.getElementById('q-pct').textContent = '100% complete';
+    setTimeout(function() {
+      document.getElementById('quiz-questions').style.display = 'none';
+      var emailDiv = document.getElementById('quiz-email');
+      emailDiv.style.display = 'block';
+      emailDiv.classList.add('fade-in');
+    }, 300);
+  }
+}
+
+function calcResult() {
+  var counts = { T: 0, P: 0, C: 0, R: 0 };
+  answers.forEach(function(a) { counts[a]++; });
+  return Object.keys(counts).reduce(function(a, b) { return counts[a] >= counts[b] ? a : b; });
+}
+
+function submitEmail(e) {
+  e.preventDefault();
+  var email = document.getElementById('email-input').value.trim();
+  var resultType = calcResult();
+  var r = RESULTS[resultType];
+
+  // Send lead to Formspree — replace xTRISHFRM with Trish's form ID
+  fetch('https://formspree.io/f/xTRISHFRM', {
+    method: 'POST',
+    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email, result: r.title, answers: answers.join(',') })
+  }).catch(function() {});
+
+  document.getElementById('quiz-email').style.display = 'none';
+
+  var resultDiv = document.getElementById('quiz-result');
+  resultDiv.style.display = 'block';
+  resultDiv.classList.add('fade-in');
+  resultDiv.innerHTML =
+    '<div class="result-wrap">' +
+      '<div class="result-badge">Your Result</div>' +
+      '<p style="font-size:52px;margin-bottom:12px;">' + r.emoji + '</p>' +
+      '<h3 style="font-family:\'Montserrat\',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;margin-bottom:10px;">' + r.title + '</h3>' +
+      '<p style="font-size:16px;opacity:.8;font-style:italic;margin-bottom:24px;">' + r.tagline + '</p>' +
+      '<p style="font-size:15px;line-height:1.85;opacity:.92;margin-bottom:24px;max-width:520px;margin-left:auto;margin-right:auto;">' + r.desc + '</p>' +
+      '<div style="background:rgba(255,255,255,.14);border-radius:12px;padding:20px 24px;margin-bottom:20px;text-align:left;">' +
+        '<p style="font-family:\'Montserrat\',sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.1em;opacity:.65;margin-bottom:8px;">Your First Product Idea</p>' +
+        '<p style="font-size:15px;line-height:1.75;">' + r.product + '</p>' +
+      '</div>' +
+      '<div style="background:rgba(232,160,48,.2);border:1px solid rgba(232,160,48,.45);border-radius:12px;padding:20px 24px;margin-bottom:24px;text-align:left;">' +
+        '<p style="font-family:\'Montserrat\',sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">📬 What\'s Next</p>' +
+        '<p style="font-size:15px;line-height:1.75;">' + r.next + '</p>' +
+      '</div>' +
+      '<p style="font-size:13px;opacity:.65;">Check your inbox at <strong>' + email + '</strong> — Trish will be in touch shortly.</p>' +
+    '</div>' +
+    '<div style="margin-top:32px;">' +
+      '<p style="font-family:\'Montserrat\',sans-serif;font-weight:700;font-size:14px;color:var(--text);text-align:center;margin-bottom:20px;">Ready to take the next step?</p>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">' +
+        '<a href="https://www.skool.com/clarity-collective-6768/" target="_blank" style="display:block;background:var(--green);color:#fff;font-family:\'Montserrat\',sans-serif;font-weight:700;font-size:14px;text-align:center;padding:16px 20px;border-radius:10px;text-decoration:none;transition:background .2s;" onmouseover="this.style.background=\'var(--green-dark)\'" onmouseout="this.style.background=\'var(--green)\'">Join the Community →</a>' +
+        '<a href="https://www.digitaldmsmom.com" target="_blank" style="display:block;background:#fff;color:var(--green);font-family:\'Montserrat\',sans-serif;font-weight:700;font-size:14px;text-align:center;padding:16px 20px;border-radius:10px;text-decoration:none;border:2px solid var(--green);transition:all .2s;" onmouseover="this.style.background=\'var(--green-light)\'" onmouseout="this.style.background=\'#fff\'">Visit My Website →</a>' +
+      '</div>' +
+      '<p style="font-size:12px;color:var(--muted);text-align:center;margin-top:14px;">Join a community of moms building their digital product businesses together.</p>' +
+    '</div>';
+}
+</script>
+
+</body>
+</html>
